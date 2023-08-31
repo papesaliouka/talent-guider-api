@@ -2,8 +2,6 @@ import express from 'express';
 import apiRoutes from './routes/apiRoutes';
 import { errorHandler } from './utils/errorHandler';
 import cors from 'cors';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 
 import dotenv from 'dotenv';
@@ -22,15 +20,6 @@ app.use(cors({
     credentials: true 
 }));
 app.use(cookieParser());
-app.use(
-  session({
-      name: 'sid',
-    secret: SESSION_SECRET,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI}),
-    resave: false,
-    saveUninitialized: false,
-  })
-);
 // Routes
 app.use('/api', apiRoutes);
 

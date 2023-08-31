@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UserRepository } from '../repositories/authRepository';
+import { SessionRepository } from '../repositories/sessionRepository';
 import bcrypt from 'bcryptjs';
 
 export const register = async (req: Request, res: Response) => {
@@ -56,23 +57,21 @@ export const login = async (req: Request, res: Response) => {
         id: user._id,
     };
     
-    req.sessionID = user._id;
     
-
-    const sessionData = {
+    const sessionValue= {
         id: user._id,
-        maxAge: 24 * 60 * 60 * 1000,
-        originalMaxAge: 24 * 60 * 60 * 1000,
-    }
-    
-    req.session.cookie= sessionData;
-    req.session.save();
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    };
 
-    res.cookie("sid",req.sessionID.toString(),
-               { maxAge: 24 * 60 * 60 * 1000,
-               }
-    );  
+    const session = await SessionRepository.createSession(sessionValue);
+    if (!session) {
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+
+    res.cookie("sid",user._id,{ maxAge: 24 * 60 * 60 * 1000,});  
     res.status(200).json({ message: 'User logged in successfully',user:userToSend });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', });
@@ -81,14 +80,26 @@ export const login = async (req: Request, res: Response) => {
 
 
 export const logout = async (req: Request, res: Response) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal Server Error' });
-        }
-        res.clearCookie('sid');
-        res.status(200).json({ message: 'User logged out successfully' });
-    });
+    
+    const sessionID = req.cookies.sid;
+
+    if (!sessionID) {
+        return res.status(401).json({ message: 'User not logged in' });
+    }
+
+    const session = await SessionRepository.findByUserID(sessionID);
+    if (!session) {
+        return res.status(402).json({ message: 'User not logged in' });
+    }
+
+    const deleted = await SessionRepository.deleteByUserID(sessionID);
+    if (!deleted) {
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+
+    res.clearCookie('sid');
+    res.status(200).json({ message: 'User logged out successfully' });
 };
 
 

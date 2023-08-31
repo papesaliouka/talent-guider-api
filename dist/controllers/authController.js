@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.login = exports.register = void 0;
 const authRepository_1 = require("../repositories/authRepository");
+const sessionRepository_1 = require("../repositories/sessionRepository");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, username } = req.body;
@@ -56,32 +57,42 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!passwordMatch) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        req.sessionID = user._id;
-        const sessionData = {
+        const userToSend = {
+            username: user.username,
+            email: user.email,
             id: user._id,
-            maxAge: 24 * 60 * 60 * 1000,
-            originalMaxAge: 24 * 60 * 60 * 1000,
         };
-        req.session.cookie = sessionData;
-        req.session.save();
-        res.cookie("sid", req.sessionID.toString(), { maxAge: 24 * 60 * 60 * 1000,
-        });
-        res.status(200).json({ message: 'User logged in successfully' });
+        const sessionValue = {
+            id: user._id,
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        };
+        const session = yield sessionRepository_1.SessionRepository.createSession(sessionValue);
+        if (!session) {
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+        res.cookie("sid", user._id, { maxAge: 24 * 60 * 60 * 1000, });
+        res.status(200).json({ message: 'User logged in successfully', user: userToSend });
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        res.status(500).json({ message: 'Internal Server Error', });
     }
 });
 exports.login = login;
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal Server Error' });
-        }
-        res.clearCookie('sid');
-        res.status(200).json({ message: 'User logged out successfully' });
-    });
+    const sessionID = req.cookies.sid;
+    if (!sessionID) {
+        return res.status(401).json({ message: 'User not logged in' });
+    }
+    const session = yield sessionRepository_1.SessionRepository.findByUserID(sessionID);
+    if (!session) {
+        return res.status(402).json({ message: 'User not logged in' });
+    }
+    const deleted = yield sessionRepository_1.SessionRepository.deleteByUserID(sessionID);
+    if (!deleted) {
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+    res.clearCookie('sid');
+    res.status(200).json({ message: 'User logged out successfully' });
 });
 exports.logout = logout;

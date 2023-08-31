@@ -12,48 +12,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserRepository = void 0;
-const User_1 = __importDefault(require("../models/User"));
-exports.UserRepository = {
-    findByEmail(email) {
+exports.SessionRepository = void 0;
+const Session_1 = __importDefault(require("../models/Session"));
+exports.SessionRepository = {
+    createSession(session) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield User_1.default.findOne({ email });
+                return yield Session_1.default.create(session);
             }
             catch (error) {
                 throw error;
             }
         });
     },
-    findByUsername(username) {
+    findByUserID(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield User_1.default.findOne({ username });
+                return yield Session_1.default.findOne({ id: id });
             }
             catch (error) {
                 throw error;
             }
         });
     },
-    findByID(id) {
+    deleteByUserID(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield User_1.default.findOne({ _id: id });
-            }
-            catch (error) {
-                throw error;
-            }
-        });
-    },
-    createUser(email, username, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const newUser = new User_1.default({
-                    username,
-                    email,
-                    password,
-                });
-                return yield newUser.save();
+                return yield Session_1.default.findOneAndDelete({ id: id });
             }
             catch (error) {
                 throw error;

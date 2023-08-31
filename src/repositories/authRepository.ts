@@ -17,6 +17,14 @@ export const UserRepository = {
     }
   },
 
+  async findByID(id: string): Promise<IUser | null> {
+    try {
+        return await User.findOne({ _id: id });
+    } catch (error) {
+        throw error;
+    }
+  },
+
   async createUser(email: string,username:string , password: string): Promise<IUser> {
     try {
       const newUser = new User({
