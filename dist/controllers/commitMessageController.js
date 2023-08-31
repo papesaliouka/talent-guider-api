@@ -10,14 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllCommitMessages = void 0;
-const db_1 = require("../db"); // Import the function
+const commitsRepository_1 = require("../repositories/commitsRepository");
 const getAllCommitMessages = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const dbConnection = yield (0, db_1.connectToDatabase)('test-bot');
-        const commitMessagesCollection = dbConnection.collection('commits'); // Specify the collection name
-        const commitMessages = yield commitMessagesCollection.find();
-        const data = yield commitMessages.toArray();
-        res.json(data);
+        const commitMessages = yield commitsRepository_1.CommitMessageRepository.getAllCommitMessages();
+        res.json(commitMessages);
     }
     catch (error) {
         console.error(error);
@@ -25,4 +22,3 @@ const getAllCommitMessages = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.getAllCommitMessages = getAllCommitMessages;
-// Add more controller functions as needed

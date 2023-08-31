@@ -16,6 +16,6 @@ const commitMessageSchema = new Schema<ICommitMessage>({
   branch: String,
 });
 
-const CommitMessage = mongoose.model<ICommitMessage>('CommitMessage', commitMessageSchema);
+const CommitMessage = mongoose.model<ICommitMessage>('commits', commitMessageSchema);
 
 export default CommitMessage;

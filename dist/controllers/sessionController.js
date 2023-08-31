@@ -9,16 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTaskLogs = void 0;
-const logsRepository_1 = require("../repositories/logsRepository");
-const getAllTaskLogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.checkSessionValidity = void 0;
+const checkSessionValidity = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const taskLogs = yield logsRepository_1.TaskLogRepository.getAllTaskLogs();
-        res.json(taskLogs);
+        if (req.sessionID) {
+            // User is authenticated
+            res.status(200).json({ valid: true });
+        }
+        else {
+            // User is not authenticated
+            res.status(200).json({ valid: false });
+        }
     }
     catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
-exports.getAllTaskLogs = getAllTaskLogs;
+exports.checkSessionValidity = checkSessionValidity;

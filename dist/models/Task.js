@@ -5,5 +5,5 @@ const taskSchema = new mongoose_1.Schema({
     title: String,
     description: String,
 });
-const Task = (0, mongoose_1.model)('Task', taskSchema);
+const Task = (0, mongoose_1.model)('task', taskSchema);
 exports.default = Task;

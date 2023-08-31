@@ -23,13 +23,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.userSchema = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const commitMessageSchema = new mongoose_1.Schema({
-    gitUsername: String,
-    title: String,
-    description: String,
-    repo: String,
-    branch: String,
+exports.userSchema = new mongoose_1.Schema({
+    username: String,
+    password: String,
+    email: String,
+    avatar: String,
 });
-const CommitMessage = mongoose_1.default.model('commits', commitMessageSchema);
-exports.default = CommitMessage;
+const User = mongoose_1.default.model('users', exports.userSchema);
+exports.default = User;

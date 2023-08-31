@@ -18,6 +18,6 @@ export const taskLogSchema = new Schema<ITaskLog>({
   subjectName: String,
 });
 
-const TaskLog = mongoose.model<ITaskLog>('TaskLog', taskLogSchema);
+const TaskLog = mongoose.model<ITaskLog>('test-bot-logs', taskLogSchema);
 
 export default TaskLog;

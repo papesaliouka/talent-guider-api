@@ -8,17 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTaskLogs = void 0;
-const logsRepository_1 = require("../repositories/logsRepository");
-const getAllTaskLogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const taskLogs = yield logsRepository_1.TaskLogRepository.getAllTaskLogs();
-        res.json(taskLogs);
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
-exports.getAllTaskLogs = getAllTaskLogs;
+exports.TaskLogRepository = void 0;
+const TaskLog_1 = __importDefault(require("../models/TaskLog"));
+exports.TaskLogRepository = {
+    getAllTaskLogs() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield TaskLog_1.default.find();
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    },
+};

@@ -9,16 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTaskLogs = void 0;
-const logsRepository_1 = require("../repositories/logsRepository");
-const getAllTaskLogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const taskLogs = yield logsRepository_1.TaskLogRepository.getAllTaskLogs();
-        res.json(taskLogs);
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
-exports.getAllTaskLogs = getAllTaskLogs;
+exports.CommitMessageRepository = void 0;
+const db_1 = require("../db"); // Import the function
+exports.CommitMessageRepository = {
+    getAllCommitMessages() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const dbConnection = yield (0, db_1.connectToDatabase)('test-bot');
+                const commitMessagesCollection = dbConnection.collection('commits');
+                const commitMessages = yield commitMessagesCollection.find().toArray();
+                return commitMessages;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    },
+};

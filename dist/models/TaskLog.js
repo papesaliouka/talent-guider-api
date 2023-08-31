@@ -33,5 +33,5 @@ exports.taskLogSchema = new mongoose_1.Schema({
     duration: Number,
     subjectName: String,
 });
-const TaskLog = mongoose_1.default.model('TaskLog', exports.taskLogSchema);
+const TaskLog = mongoose_1.default.model('test-bot-logs', exports.taskLogSchema);
 exports.default = TaskLog;

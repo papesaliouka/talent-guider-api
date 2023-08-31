@@ -1,5 +1,9 @@
 import mongoose, { ConnectOptions } from 'mongoose';
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 interface MyOption extends ConnectOptions {
   useNewUrlParser: boolean;
   useUnifiedTopology: boolean;
@@ -10,9 +14,23 @@ const options: MyOption = {
   useUnifiedTopology: true,
 };
 
+mongoose.connection.once('open', ()=> {
+    console.log('MongoDB connection ready')
+});
 
-export const connectToDatabase = async (dbName: string) => {
-  const dbConnection = await mongoose.createConnection(`mongodb+srv://pskath1:sb2yyNkaCJtPJ5h4@mongoflix.tw5gy.mongodb.net/${dbName}`, options);
+mongoose.connection.on('error', (err)=> {
+    console.error(err)
+})
 
+
+const URI: string = process.env.MONGO_URI || "";
+
+export const connectToDatabase = async (dbname: string) => {
+  const dbConnection = mongoose.createConnection(`${URI}/${dbname}`, options);
   return dbConnection;
+};
+
+export const mongoConnect = async () => {
+    await mongoose.connect(URI, options);
+    console.log('MongoDB connected');
 };

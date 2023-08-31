@@ -10,6 +10,6 @@ const taskSchema = new Schema<ITask>({
   description: String,
 });
 
-const Task = model<ITask>('Task', taskSchema);
+const Task = model<ITask>('task', taskSchema);
 
 export default Task;

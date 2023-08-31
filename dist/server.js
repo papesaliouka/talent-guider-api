@@ -8,17 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTaskLogs = void 0;
-const logsRepository_1 = require("../repositories/logsRepository");
-const getAllTaskLogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const taskLogs = yield logsRepository_1.TaskLogRepository.getAllTaskLogs();
-        res.json(taskLogs);
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
-exports.getAllTaskLogs = getAllTaskLogs;
+const http_1 = __importDefault(require("http"));
+const app_1 = __importDefault(require("./app"));
+const db_1 = require("./db");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const PORT = process.env.PORT || 8000;
+const server = http_1.default.createServer(app_1.default);
+function startServer() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield (0, db_1.mongoConnect)();
+        server.listen(PORT, () => {
+            console.log(`Listening on port ${PORT}...`);
+        });
+    });
+}
+startServer();
