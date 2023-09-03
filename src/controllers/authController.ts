@@ -78,7 +78,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
 
-    res.cookie('sid', user._id, { maxAge: 24 * 60 * 60 * 1000,sameSite: 'none', secure: false,path: '/',domain:'https://talent-guider-api-production.up.railway.app/' });
+    res.cookie('sid', user._id, { maxAge: 24 * 60 * 60 * 1000,sameSite: 'none', secure: false,path: '/',domain:'talent-guider-ui.vercel.app' });
     res.status(200).json({ message: 'User logged in successfully', user: userToSend });
   } catch (error) {
     console.error(error);
