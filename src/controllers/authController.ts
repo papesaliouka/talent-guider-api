@@ -59,7 +59,7 @@ export const login = async (req: Request, res: Response) => {
     
     
     const sessionValue= {
-        id: user._id,
+        ...userToSend,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     };
 

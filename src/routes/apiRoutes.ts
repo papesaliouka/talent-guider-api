@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllTaskLogs } from '../controllers/taskLogController';
+import { getAllTaskLogs, getTaskLogByUserID } from '../controllers/taskLogController';
 import { getAllCommitMessages } from '../controllers/commitMessageController';
 import { login,register,logout } from '../controllers/authController';
 import { checkSessionValidity } from '../controllers/sessionController';
@@ -8,7 +8,7 @@ import { checkSessionValidity } from '../controllers/sessionController';
 const router = express.Router();
 
 
-router.get('/tasks', getAllTaskLogs);
+router.get('/tasks', getTaskLogByUserID);
 router.get('/commits', getAllCommitMessages);
 router.post('/auth/login',login);
 router.post('/auth/register',register);
