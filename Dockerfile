@@ -2,14 +2,12 @@ FROM node:16-alpine
 
 WORKDIR /app
 
-COPY package.json .
+COPY .  /app
 
 RUN npm install
 
 RUN npm run build
 
-COPY ./dist .
-
-EXPOSE 3000
+EXPOSE 8000
 
 CMD ["node", "server.js"]
