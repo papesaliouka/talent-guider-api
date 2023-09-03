@@ -48,8 +48,18 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email, password } = req.body;
-        const user = yield authRepository_1.UserRepository.findByEmail(email);
+        const { identifier, password } = req.body;
+        // Check if the identifier is an email or username
+        const isEmail = identifier.includes('@');
+        let user;
+        if (isEmail) {
+            // If it's an email, find the user by email
+            user = yield authRepository_1.UserRepository.findByEmail(identifier);
+        }
+        else {
+            // If it's not an email, find the user by username
+            user = yield authRepository_1.UserRepository.findByUsername(identifier);
+        }
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
@@ -62,20 +72,17 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             email: user.email,
             id: user._id,
         };
-        const sessionValue = {
-            id: user._id,
-            expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        };
+        const sessionValue = Object.assign(Object.assign({}, userToSend), { expires: new Date(Date.now() + 24 * 60 * 60 * 1000) });
         const session = yield sessionRepository_1.SessionRepository.createSession(sessionValue);
         if (!session) {
             return res.status(500).json({ message: 'Internal Server Error' });
         }
-        res.cookie("sid", user._id, { maxAge: 24 * 60 * 60 * 1000, });
+        res.cookie('sid', user._id, { maxAge: 24 * 60 * 60 * 1000 });
         res.status(200).json({ message: 'User logged in successfully', user: userToSend });
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal Server Error', });
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 exports.login = login;

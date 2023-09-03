@@ -9,7 +9,7 @@ const commitMessageController_1 = require("../controllers/commitMessageControlle
 const authController_1 = require("../controllers/authController");
 const sessionController_1 = require("../controllers/sessionController");
 const router = express_1.default.Router();
-router.get('/tasks', taskLogController_1.getAllTaskLogs);
+router.get('/tasks', taskLogController_1.getTaskLogByUserID);
 router.get('/commits', commitMessageController_1.getAllCommitMessages);
 router.post('/auth/login', authController_1.login);
 router.post('/auth/register', authController_1.register);

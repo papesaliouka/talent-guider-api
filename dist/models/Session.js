@@ -27,6 +27,8 @@ exports.sessionSchema = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 exports.sessionSchema = new mongoose_1.Schema({
     id: String,
+    username: String,
+    email: String,
     expires: Date,
 });
 const User = mongoose_1.default.model('sessions', exports.sessionSchema);

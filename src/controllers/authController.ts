@@ -39,42 +39,50 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
-    
-    const user = await UserRepository.findByEmail(email);
+    const { identifier, password } = req.body;
+
+    // Check if the identifier is an email or username
+    const isEmail = identifier.includes('@');
+    let user;
+
+    if (isEmail) {
+      // If it's an email, find the user by email
+      user = await UserRepository.findByEmail(identifier);
+    } else {
+      // If it's not an email, find the user by username
+      user = await UserRepository.findByUsername(identifier);
+    }
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    
+
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    
-    const userToSend ={
-        username: user.username,
-        email: user.email,
-        id: user._id,
+
+    const userToSend = {
+      username: user.username,
+      email: user.email,
+      id: user._id,
     };
-    
-    
-    const sessionValue= {
-        ...userToSend,
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+
+    const sessionValue = {
+      ...userToSend,
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     };
 
     const session = await SessionRepository.createSession(sessionValue);
     if (!session) {
-        return res.status(500).json({ message: 'Internal Server Error' });
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
 
-
-    res.cookie("sid",user._id,{ maxAge: 24 * 60 * 60 * 1000,});  
-    res.status(200).json({ message: 'User logged in successfully',user:userToSend });
-
+    res.cookie('sid', user._id, { maxAge: 24 * 60 * 60 * 1000 });
+    res.status(200).json({ message: 'User logged in successfully', user: userToSend });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error', });
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
