@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllTaskLogs, getTaskLogByUserID } from '../controllers/taskLogController';
+import {  getTaskLogByUserID } from '../controllers/taskLogController';
 import { getAllCommitMessages } from '../controllers/commitMessageController';
 import { login,register,logout } from '../controllers/authController';
 import { checkSessionValidity } from '../controllers/sessionController';

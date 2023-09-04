@@ -36,7 +36,6 @@ export const register = async (req: Request, res: Response) => {
 };
 
 
-
 export const login = async (req: Request, res: Response) => {
   try {
     const { identifier, password } = req.body;
@@ -77,8 +76,13 @@ export const login = async (req: Request, res: Response) => {
     if (!session) {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
+    if (process.env.PROD === 'production'){
+        res.cookie('sid', user._id, { maxAge: 24 * 60 * 60 * 1000,sameSite: 'none', secure: true,path: '/',domain:'talent-guider-api-production.up.railway.app' });
+    }else{
+        res.cookie('sid', user._id, { maxAge: 24 * 60 * 60 * 1000 });
+    }
 
-    res.cookie('sid', user._id, { maxAge: 24 * 60 * 60 * 1000,sameSite: 'none', secure: true,path: '/',domain:'talent-guider-api-production.up.railway.app' });
+
     res.status(200).json({ message: 'User logged in successfully', user: userToSend });
   } catch (error) {
     console.error(error);

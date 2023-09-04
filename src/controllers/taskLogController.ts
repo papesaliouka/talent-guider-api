@@ -35,7 +35,6 @@ export const getTaskLogByUserID = async (req: Request, res: Response) => {
         const endDate = new Date();
     
         const taskLogs = await TaskLogRepository.getTaskLogByUsername(user.username,startDate.toISOString(), endDate.toISOString());
-        console.log(taskLogs);
         res.json(taskLogs);
     } catch (error) {
         console.error(error);
