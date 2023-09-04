@@ -13,7 +13,7 @@ dotenv.config();
 
 const app = express();
 
-const origin = process.env.ORIGIN || 'http://localhost:3000';
+const origin = process.env.ORIGIN 
 
 
 // Middleware
