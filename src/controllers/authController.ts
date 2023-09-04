@@ -77,9 +77,20 @@ export const login = async (req: Request, res: Response) => {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
     if (process.env.PROD === 'production'){
-        res.cookie('sid', user._id, { maxAge: 24 * 60 * 60 * 1000,sameSite: 'none', secure: true,path: '/',domain:'talent-guider-api-production.up.railway.app' });
+        res.cookie('sid', user._id,
+                   { maxAge: 24 * 60 * 60 * 1000,
+                     sameSite: 'none',
+                     secure: false,
+                     path: '/',
+                     domain:'talent-guider-api-production.up.railway.app',
+                   });
     }else{
-        res.cookie('sid', user._id, { maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('sid', user._id, {
+            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: 'none',
+            secure: false,
+            path: '/',
+        });
     }
 
 
