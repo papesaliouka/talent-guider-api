@@ -26,7 +26,7 @@ async getTaskLogByUsername(username: string,startDate:string , endDate: string) 
             'day': {
                 '$dayOfWeek': {
                    date: '$startTime',
-                   timezone: 'Senegeal/Dakar'
+                   timezone: 'Senegal/Dakar'
                 }
             },
             'week': {
