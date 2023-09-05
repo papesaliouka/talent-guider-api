@@ -6,6 +6,7 @@ export interface ICommitMessage extends Document {
   description: string;
   repo: string;
   branch: string;
+  date: Date;
 }
 
 const commitMessageSchema = new Schema<ICommitMessage>({
@@ -14,6 +15,7 @@ const commitMessageSchema = new Schema<ICommitMessage>({
   description: String,
   repo: String,
   branch: String,
+  date: Date,
 });
 
 const CommitMessage = mongoose.model<ICommitMessage>('commits', commitMessageSchema);

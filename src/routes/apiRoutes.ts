@@ -1,6 +1,6 @@
 import express from 'express';
 import {  getTaskLogByUserID } from '../controllers/taskLogController';
-import { getAllCommitMessages } from '../controllers/commitMessageController';
+import { getCommitMessageByUsername} from '../controllers/commitMessageController';
 import { login,register,logout } from '../controllers/authController';
 import { checkSessionValidity } from '../controllers/sessionController';
 
@@ -9,7 +9,7 @@ const router = express.Router();
 
 
 router.get('/tasks', getTaskLogByUserID);
-router.get('/commits', getAllCommitMessages);
+router.get('/commits', getCommitMessageByUsername);
 router.post('/auth/login',login);
 router.post('/auth/register',register);
 router.get('/auth/check-session', checkSessionValidity);

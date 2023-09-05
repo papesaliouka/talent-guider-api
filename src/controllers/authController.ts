@@ -87,7 +87,7 @@ export const login = async (req: Request, res: Response) => {
     }else{
         res.cookie('sid', user._id, {
             maxAge: 24 * 60 * 60 * 1000,
-            sameSite: 'lax',
+            sameSite: 'none',
             secure: false,
             path: '/',
         });

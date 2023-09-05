@@ -31,7 +31,7 @@ export const getTaskLogByUserID = async (req: Request, res: Response) => {
         }
 
         const startDate = new Date();
-        startDate.setDate(startDate.getDate() - 6);
+        startDate.setDate(startDate.getDate() - 7);
         const endDate = new Date();
     
         const taskLogs = await TaskLogRepository.getTaskLogByUsername(user.username,startDate.toISOString(), endDate.toISOString());
