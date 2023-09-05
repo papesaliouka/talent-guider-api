@@ -82,7 +82,7 @@ export const login = async (req: Request, res: Response) => {
                      sameSite: 'none',
                      secure: true,
                      path: '/',
-                     domain:'talent-guider-api-production.up.railway.app',
+                     domain:process.env.DOMAIN,
                    });
     }else{
         res.cookie('sid', user._id, {
